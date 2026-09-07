@@ -2,7 +2,7 @@
 
 Iacopo Curti, Pierluigi Zama Ramirez, Alioscia Petrelli, Luigi Di Stefano
 
-[Project page](https://iacopo97.github.io/CoordFormer/) · [arXiv](https://arxiv.org/abs/XXXX.XXXXX)
+[Project page](https://iacopo97.github.io/CoordFormer/index.html) · [arXiv](https://arxiv.org/abs/XXXX.XXXXX)
 
 ![CoordFormer results on MaSS13K, DIS5K and KPIs](assets/teaser.jpg)
 
