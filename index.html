@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>CoordFormer: Give Me Any Coordinates and I Will Give You Labels</title>
+<meta name="description" content="CoordFormer — a coordinate-based architecture for semantic segmentation of very-high-resolution images.">
+<meta property="og:title" content="CoordFormer: Give Me Any Coordinates and I Will Give You Labels">
+<meta property="og:description" content="A coordinate-based architecture that predicts labels at arbitrary spatial locations, for very-high-resolution semantic segmentation.">
+<meta property="og:image" content="assets/teaser.jpg">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --paper:#E7ECEC;
+    --panel:#F4F7F7;
+    --ink:#11181B;
+    --graphite:#5A666B;
+    --rule:#C3CDCE;
+    --rule-strong:#9BA9AB;
+    --signal:#1F3BD0;
+    --sans:"IBM Plex Sans", system-ui, sans-serif;
+    --mono:"IBM Plex Mono", ui-monospace, monospace;
+  }
+
+  *{box-sizing:border-box}
+  html{-webkit-text-size-adjust:100%}
+
+  body{
+    margin:0;
+    background:var(--paper);
+    color:var(--ink);
+    font-family:var(--sans);
+    font-size:17px;
+    line-height:1.62;
+    -webkit-font-smoothing:antialiased;
+  }
+
+  a{color:var(--signal);text-decoration:none;border-bottom:1px solid rgba(31,59,208,.3)}
+  a:hover{border-bottom-color:var(--signal)}
+  a:focus-visible,button:focus-visible{outline:2px solid var(--signal);outline-offset:3px}
+
+  .shell{max-width:800px;margin:0 auto;padding:0 28px}
+
+  header{padding:72px 0 0;text-align:center}
+
+  h1{
+    font-size:clamp(32px,5.2vw,52px);
+    line-height:1.05;letter-spacing:-.026em;font-weight:600;margin:0;
+  }
+  h1 .sub{
+    display:block;font-size:clamp(18px,2.5vw,25px);line-height:1.22;
+    letter-spacing:-.012em;font-weight:400;color:var(--graphite);margin-top:12px;
+  }
+
+  .authors{margin:30px 0 0;font-size:17px}
+  .authors span{white-space:nowrap;margin:0 6px}
+  .authors sup{font-size:11px;font-family:var(--mono);color:var(--signal)}
+  .affil{margin:10px 0 0;color:var(--graphite);font-size:15px;line-height:1.7}
+  .affil span{white-space:nowrap;margin:0 8px}
+  .affil sup{font-size:11px;font-family:var(--mono);color:var(--signal)}
+
+  .resources{display:flex;flex-wrap:wrap;gap:10px;justify-content:center;margin:30px 0 0}
+  .resources a,.resources span{border:1px solid var(--rule-strong);padding:9px 17px;font-size:15px;font-weight:500}
+  .resources a{background:var(--panel);color:var(--ink)}
+  .resources a:hover{background:var(--ink);color:var(--panel);border-color:var(--ink)}
+  .resources span{color:var(--graphite);font-weight:400;border-style:dashed;background:none}
+
+  .teaser{margin:56px 0 0}
+  .teaser img{display:block;width:100%;height:auto;border:1px solid var(--rule-strong);background:var(--panel)}
+  figcaption{font-size:14px;color:var(--graphite);line-height:1.5;margin-top:12px;text-align:left}
+
+  main{padding:60px 0 0}
+  section{margin-bottom:56px}
+
+  h2{
+    font-size:15px;font-weight:600;margin:0 0 18px;
+    padding-bottom:9px;border-bottom:1px solid var(--rule-strong);
+  }
+  p{margin:0 0 18px}
+  p:last-child{margin-bottom:0}
+
+  .status{border-left:3px solid var(--signal);background:var(--panel);padding:16px 18px}
+  .status p{font-size:15.5px;color:var(--graphite);margin:0}
+  .status strong{color:var(--ink);font-weight:600}
+
+  .cite{border:1px solid var(--rule-strong);background:var(--panel)}
+  .cite header{display:flex;justify-content:space-between;align-items:center;gap:12px;padding:10px 14px;border-bottom:1px solid var(--rule);text-align:left}
+  .cite header span{font-size:13.5px;color:var(--graphite)}
+  .cite button{font:500 13px/1 var(--sans);background:var(--ink);color:var(--panel);border:0;padding:7px 14px;cursor:pointer}
+  .cite pre{margin:0;padding:16px 14px;overflow-x:auto;font-family:var(--mono);font-size:13.5px;line-height:1.7}
+
+  footer{border-top:1px solid var(--rule-strong);padding:24px 0 64px;font-size:14px;color:var(--graphite)}
+  footer p{margin:0}
+
+  @media (max-width:640px){
+    header{padding-top:44px}
+    main{padding-top:44px}
+    .authors span,.affil span{display:block;margin:2px 0}
+  }
+  @media (prefers-reduced-motion:reduce){*{transition-duration:.001ms !important}}
+</style>
+</head>
+<body>
+
+<div class="shell">
+
+  <header>
+    <h1>CoordFormer
+      <span class="sub">Give Me Any Coordinates and I Will Give You Labels</span>
+    </h1>
+
+    <p class="authors">
+      <span>Iacopo Curti<sup>1</sup></span>
+      <span>Pierluigi Zama Ramirez<sup>2</sup></span>
+      <span>Alioscia Petrelli<sup>3</sup></span>
+      <span>Luigi Di Stefano<sup>1</sup></span>
+    </p>
+    <p class="affil">
+      <span><sup>1</sup>CVLab, University of Bologna</span>
+      <span><sup>2</sup>Ca' Foscari University of Venice</span>
+      <span><sup>3</sup>SINA company</span>
+    </p>
+
+    <nav class="resources" aria-label="Paper resources">
+      <a href="https://arxiv.org/abs/XXXX.XXXXX">arXiv</a>
+      <span>Code — October 2026</span>
+    </nav>
+
+    <figure class="teaser">
+      <img src="assets/teaser.jpg"
+           alt="Segmentation results on MaSS13K, DIS5K and KPIs, with zoomed crops showing thin structures and fine boundaries.">
+      <figcaption>
+        Segmentation results by CoordFormer on MaSS13K (left), DIS5K (center) and KPIs (right).
+        CoordFormer predicts labels directly at selected pixel locations, enabling highly detailed
+        segmentation of very-high-resolution images and capturing thin structures and fine boundaries.
+      </figcaption>
+    </figure>
+  </header>
+
+  <main>
+
+    <section>
+      <h2>Abstract</h2>
+      <p>
+        Semantic segmentation on very-high-resolution images remains challenging due to the high computational
+        cost and the difficulty of capturing fine-grained details. We propose CoordFormer, a novel
+        coordinate-based architecture for semantic segmentation that predicts labels at arbitrary spatial
+        locations through a Coordinate Decoder equipped with a Localized Cross-Attention mechanism. The decoder
+        combines coordinate embeddings with high-resolution local patch features and interacts with global tokens
+        extracted from a downsampled image processed by a ViT foundation encoder, enabling rich semantic context
+        while preserving pixel-level precision.
+      </p>
+      <p>
+        This design enables flexible inference at arbitrary resolutions while keeping memory low on
+        very-high-resolution inputs, and supports an efficient semantic-edge-focused strategy that concentrates
+        computation along boundaries, maintaining fine-grained accuracy while reducing latency and computational
+        cost. CoordFormer achieves state-of-the-art performance on MaSS13K and outperforms comparably sized and
+        higher-parameter methods on DIS5K and KPIs, demonstrating its effectiveness for high-quality,
+        very-high-resolution semantic segmentation.
+      </p>
+    </section>
+
+    <section>
+      <h2>Code</h2>
+      <div class="status">
+        <p><strong>Code will be released in October 2026.</strong>
+        Training and evaluation code, along with the checkpoints used for the results in the paper,
+        will be published in this repository. Watch it to be notified when the release lands.</p>
+      </div>
+    </section>
+
+    <section>
+      <h2>Acknowledgements</h2>
+      <p>
+        We acknowledge ISCRA for awarding this project access to the LEONARDO supercomputer, owned by the
+        EuroHPC Joint Undertaking, hosted by CINECA (Italy).
+      </p>
+    </section>
+
+    <section>
+      <h2>BibTeX</h2>
+      <div class="cite">
+        <header>
+          <span>Fill in the arXiv identifier once the preprint is live.</span>
+          <button type="button" id="copy">Copy</button>
+        </header>
+<pre id="bib">@article{curti2026coordformer,
+  title   = {CoordFormer: Give Me Any Coordinates and I Will Give You Labels},
+  author  = {Curti, Iacopo and Zama Ramirez, Pierluigi and
+             Petrelli, Alioscia and Di Stefano, Luigi},
+  journal = {arXiv preprint arXiv:XXXX.XXXXX},
+  year    = {2026}
+}</pre>
+      </div>
+    </section>
+
+  </main>
+
+  <footer>
+    <p>Page template for the CoordFormer preprint. Replace the arXiv identifier in the links and the BibTeX entry.</p>
+  </footer>
+
+</div>
+
+<script>
+document.getElementById("copy").addEventListener("click", function(){
+  var btn = this;
+  var text = document.getElementById("bib").textContent;
+  var done = function(msg){
+    btn.textContent = msg;
+    setTimeout(function(){ btn.textContent = "Copy"; }, 1800);
+  };
+  if(navigator.clipboard && navigator.clipboard.writeText){
+    navigator.clipboard.writeText(text).then(function(){ done("Copied"); },
+                                            function(){ done("Select and copy"); });
+  } else {
+    done("Select and copy");
+  }
+});
+</script>
+</body>
+</html>
