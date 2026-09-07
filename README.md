@@ -4,6 +4,12 @@ Iacopo Curti, Pierluigi Zama Ramirez, Alioscia Petrelli, Luigi Di Stefano
 
 [Project page](https://iacopo97.github.io/CoordFormer/) · [arXiv](https://arxiv.org/abs/XXXX.XXXXX)
 
+![CoordFormer results on MaSS13K, DIS5K and KPIs](assets/teaser.jpg)
+
+Segmentation results by CoordFormer on MaSS13K (left), DIS5K (center) and KPIs (right). CoordFormer predicts
+labels directly at selected pixel locations, enabling highly detailed segmentation of very-high-resolution
+images and capturing thin structures and fine boundaries.
+
 ## Code
 
 **Code will be released in October 2026.**
